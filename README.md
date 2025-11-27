@@ -6,10 +6,10 @@ A high-performance, concurrent Go service designed to track vehicles and detect 
 
 The system follows a **Modular Monolith** architecture using the **Standard Go Project Layout**.
 
-* **Ingestion Layer (`cmd/server`):** HTTP handlers that accept high-throughput GPS telemetry.
-* **Business Logic (`internal/processor`):** Determines state transitions (Enter/Exit) by comparing the new location against the vehicle's last known state.
-* **Geometry Engine (`internal/geo`):** Implements the Ray Casting algorithm to perform Point-in-Polygon checks.
-* **Storage (`internal/store`):** A thread-safe in-memory repository using `sync.RWMutex` to handle concurrent reads/writes.
+* **Ingestion Layer (`server`):** HTTP handlers that accept high-throughput GPS telemetry.
+* **Business Logic (`processor`):** Determines state transitions (Enter/Exit) by comparing the new location against the vehicle's last known state.
+* **Geometry Engine (`geo`):** Implements the Ray Casting algorithm to perform Point-in-Polygon checks.
+* **Storage (`store`):** A thread-safe in-memory repository using `sync.RWMutex` to handle concurrent reads/writes.
 
 ---
 
@@ -37,7 +37,7 @@ Given the **2-hour time limit**, specific engineering tradeoffs were made to bal
 The server initializes with a default zone: **"City Center"** (Square from Lat/Lon 10.0 to 20.0).
 
 ```bash
-go run cmd/server/main.go
+go run main.go
 ```
 
 You should see:
