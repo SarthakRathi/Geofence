@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:8080
+@vehicleId = taxi-01
+
+### 1. ENTER the Zone (City Center is at 10.0 - 20.0)
+# We send a coordinate (15, 15) which is INSIDE the zone.
+# Expected Server Log: [ALERT] Vehicle taxi-01 ENTERED zone zone_1
+POST {{baseUrl}}/event
+Content-Type: application/json
+
+{
+    "vehicle_id": "{{vehicleId}}",
+    "lat": 15.0,
+    "lon": 15.0,
+    "timestamp": 1672531200
+}
+
+### 2. MOVE inside the Zone
+# We send a coordinate (16, 16). Still inside.
+# Expected Server Log: (No Alert, just update)
+POST {{baseUrl}}/event
+Content-Type: application/json
+
+{
+    "vehicle_id": "{{vehicleId}}",
+    "lat": 16.0,
+    "lon": 16.0,
+    "timestamp": 1672531205
+}
+
+### 3. CHECK STATUS (Should be in 'zone_1')
+GET {{baseUrl}}/vehicle/{{vehicleId}}
+
+### 4. EXIT the Zone
+# We send a coordinate (50, 50). This is OUTSIDE.
+# Expected Server Log: [ALERT] Vehicle taxi-01 EXITED zone zone_1
+POST {{baseUrl}}/event
+Content-Type: application/json
+
+{
+    "vehicle_id": "{{vehicleId}}",
+    "lat": 50.0,
+    "lon": 50.0,
+    "timestamp": 1672531210
+}
+
+### 5. CHECK STATUS (Should be empty zone)
+GET {{baseUrl}}/vehicle/{{vehicleId}}
